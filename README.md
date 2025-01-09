@@ -1,52 +1,47 @@
-# Equipment Service Business Intelligence _ Data Visualization
+# SQL for Data Analysis Using Oracle DB Software
 
 
-This data visualization project was developed to provide business intelligence for the service operations of a fictitious equipment service company.
 
-It spotlights some key business metrics with respect to the performance of the service operations.
-These business metrics are described below.
+## Introduction
 
 
-## Business Metrics Definition
+This is a practice data analysis project that sets out to analyze the data of a fictitious company using SQL in the Oracle Database software.
+Divided into four parts, the project explores SQL data analysis concepts from basic in Part 1 all the way to complex in Part 4.
+The data analysis concepts covered in the practice project includes
 
----
+- the use of data definition language (DDL) to create tables and insert data into them
 
-**Service Level**
-: This is the proportion of customer incidents that were resolved within the stipulated service level agreement.
+- exploration of tables within a database to understand the relationship between them
 
-**Spare Consumption Ratio**
-: This is the proportion of customer incidents for which equipment modular spare parts were utilized.
+- displaying records in a particular order
 
-**Count of Equipment**
-: This is the total count of active equipment for the period under review.
+- querying the database to reveal specific insights based on simple and complex nested conditions
 
-**Faulty Equipment**
-: This is the count of equipment on which faults were reported durin the period under review.
-
-**Total Calls**
-: This is the total count of customer incidences that were reported during the period under review.
-
-**Calls per Equipment**
-: This is the average call per unit equipment.
-
-**Inventory Revenue**
-: This is the revenue made from the sales of equipment spare parts to customers.
-
-**Actual Inventory Cost**
-: This is the cost of the equipment spare parts that were used for customer incident resolution. It can also be called **Inventory Cost of Service**.
-
-**Average Inventory Cost per Equipment**
-: This is the average inventory cost of service per equipment.
-
+- understanding the difference between the traditional and ANSI SQL code structure
 
 ---
 
-## Dashboard Structure 
+## Methodology
 
-The business metrics are presented for
+This data analysis practice project was completed using SQL in Oracle Database software (Oracle Database 21c edition), the software is available on the official Oracle website.
+After successful download and installation, SQL Plus was used to configure a database instance for the analysis project.
+Next, a database connection was established with the database instance through SQL developer using the configuration parameters and credentials already created.
+Tutorial and guide documents to get this done are available in the "Docs" folder.
 
-1. Service regions
-2. Service engineers
-3. Customers
 
-The dashboards are interactive in that there is a subject selector that enable users to query the dashboard for specific subjects.
+
+Data for the practice project was created using SQL data definition language (DDL), Tables were created and records inserted into them. The script for this is available in the "Data" folder.
+
+The analysis was done using SQL data manipulation language (DML) to draw specific insight based on both simple and complex nested conditions.
+
+---
+
+
+## Tech Stack
+
+- Oraccle Database 21c
+
+- SQL *Plus
+
+- Oracle SQL Developer
+
