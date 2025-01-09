@@ -24,7 +24,7 @@ SELECT
     "MIN SALARY",
     "MAX SALARY",
     "AVERAGE SALARY",
-    e.salary AS "MANAGER SALARY",
+    e.salary       AS "MANAGER SALARY",
     "TOTAL SALARY",
     l.city,
     l.state_province,
@@ -64,7 +64,6 @@ WHERE
     e.department_id IS NOT NULL
 ORDER BY
     d.department_id;
-
 
 
 -----------********The same result can be achieved with the alternative below**********--------------

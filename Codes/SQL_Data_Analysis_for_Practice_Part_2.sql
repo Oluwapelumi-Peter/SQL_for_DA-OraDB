@@ -4,27 +4,40 @@
 -- List out the departments without managers in ascending order, with their city, state, country and region.
 
 ----Traditional Code-----
-SELECT DEPARTMENTS.DEPARTMENT_NAME, LOCATIONS.CITY, LOCATIONS.STATE_PROVINCE, COUNTRIES.COUNTRY_NAME, REGIONS.REGION_NAME
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS
-WHERE DEPARTMENTS.MANAGER_ID IS NULL
-    AND DEPARTMENTS.LOCATION_ID=LOCATIONS.LOCATION_ID
-    AND LOCATIONS.COUNTRY_ID=COUNTRIES.COUNTRY_ID
-    AND COUNTRIES.REGION_ID=REGIONS.REGION_ID
-ORDER BY DEPARTMENT_NAME ASC;
-
+SELECT
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions
+WHERE
+    departments.manager_id IS NULL
+    AND departments.location_id = locations.location_id
+    AND locations.country_id = countries.country_id
+    AND countries.region_id = regions.region_id
+ORDER BY
+    department_name ASC;
 
 -----ANSI Code------
-SELECT DEPARTMENTS.DEPARTMENT_NAME, LOCATIONS.CITY, LOCATIONS.STATE_PROVINCE, COUNTRIES.COUNTRY_NAME, REGIONS.REGION_NAME
-FROM DEPARTMENTS
-    INNER JOIN LOCATIONS
-    ON DEPARTMENTS.LOCATION_ID=LOCATIONS.LOCATION_ID
-    AND DEPARTMENTS.MANAGER_ID IS NULL
-    INNER JOIN COUNTRIES
-    ON LOCATIONS.COUNTRY_ID=COUNTRIES.COUNTRY_ID
-    INNER JOIN REGIONS
-    ON COUNTRIES.REGION_ID=REGIONS.REGION_ID
-ORDER BY DEPARTMENT_NAME ASC;
-
+SELECT
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name
+FROM
+         departments
+    INNER JOIN locations ON departments.location_id = locations.location_id
+                            AND departments.manager_id IS NULL
+    INNER JOIN countries ON locations.country_id = countries.country_id
+    INNER JOIN regions ON countries.region_id = regions.region_id
+ORDER BY
+    department_name ASC;
 
 
 
@@ -32,32 +45,49 @@ ORDER BY DEPARTMENT_NAME ASC;
 
 
 ----Traditional Code-----
-SELECT DEPARTMENTS.DEPARTMENT_NAME, EMPLOYEES.FIRST_NAME || ' ' || EMPLOYEES.LAST_NAME MANAGER_NAME,
-    LOCATIONS.CITY, LOCATIONS.STATE_PROVINCE, COUNTRIES.COUNTRY_NAME, REGIONS.REGION_NAME       
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS, EMPLOYEES
-WHERE DEPARTMENTS.MANAGER_ID IS NOT NULL
-    AND DEPARTMENTS.LOCATION_ID=LOCATIONS.LOCATION_ID
-    AND LOCATIONS.COUNTRY_ID=COUNTRIES.COUNTRY_ID
-    AND COUNTRIES.REGION_ID=REGIONS.REGION_ID
-    AND EMPLOYEES.EMPLOYEE_ID=DEPARTMENTS.MANAGER_ID
-ORDER BY DEPARTMENT_NAME ASC;
-
+SELECT
+    departments.department_name,
+    employees.first_name
+    || ' '
+    || employees.last_name manager_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions,
+    employees
+WHERE
+    departments.manager_id IS NOT NULL
+    AND departments.location_id = locations.location_id
+    AND locations.country_id = countries.country_id
+    AND countries.region_id = regions.region_id
+    AND employees.employee_id = departments.manager_id
+ORDER BY
+    department_name ASC;
 
 -----ANSI Code------
-SELECT DEPARTMENTS.DEPARTMENT_NAME, EMPLOYEES.FIRST_NAME || ' ' || EMPLOYEES.LAST_NAME MANAGER_NAME,
-    LOCATIONS.CITY, LOCATIONS.STATE_PROVINCE, COUNTRIES.COUNTRY_NAME, REGIONS.REGION_NAME
-FROM DEPARTMENTS
-    INNER JOIN LOCATIONS
-    ON DEPARTMENTS.LOCATION_ID=LOCATIONS.LOCATION_ID
-    AND DEPARTMENTS.MANAGER_ID IS NOT NULL
-    INNER JOIN EMPLOYEES
-    ON EMPLOYEES.EMPLOYEE_ID=DEPARTMENTS.MANAGER_ID
-    INNER JOIN COUNTRIES
-    ON LOCATIONS.COUNTRY_ID=COUNTRIES.COUNTRY_ID
-    INNER JOIN REGIONS
-    ON COUNTRIES.REGION_ID=REGIONS.REGION_ID
-ORDER BY DEPARTMENT_NAME ASC;
-
+SELECT
+    departments.department_name,
+    employees.first_name
+    || ' '
+    || employees.last_name manager_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name
+FROM
+         departments
+    INNER JOIN locations ON departments.location_id = locations.location_id
+                            AND departments.manager_id IS NOT NULL
+    INNER JOIN employees ON employees.employee_id = departments.manager_id
+    INNER JOIN countries ON locations.country_id = countries.country_id
+    INNER JOIN regions ON countries.region_id = regions.region_id
+ORDER BY
+    department_name ASC;
 
 
 
@@ -65,59 +95,72 @@ ORDER BY DEPARTMENT_NAME ASC;
 
 
 ----Traditional Code-----
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS, EMPLOYEES E, EMPLOYEES M, JOBS
-WHERE E.JOB_ID = JOBS.JOB_ID
-    AND E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID(+)
-    AND DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID(+)
-    AND LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID(+)
-    AND COUNTRIES.REGION_ID = REGIONS.REGION_ID(+)
-    AND E.MANAGER_ID = M.EMPLOYEE_ID(+)
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions,
+    employees e,
+    employees m,
+    jobs
+WHERE
+        e.job_id = jobs.job_id
+    AND e.department_id = departments.department_id (+)
+    AND departments.location_id = locations.location_id (+)
+    AND locations.country_id = countries.country_id (+)
+    AND countries.region_id = regions.region_id (+)
+    AND e.manager_id = m.employee_id (+)
+ORDER BY
+    employee_name ASC;
 
 -----ANSI Code
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM EMPLOYEES E
-    LEFT JOIN EMPLOYEES M
-        ON E.MANAGER_ID = M.EMPLOYEE_ID
-    LEFT JOIN DEPARTMENTS
-        ON E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID
-    LEFT JOIN LOCATIONS
-        ON DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID
-    LEFT JOIN COUNTRIES
-        ON LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID
-    LEFT JOIN REGIONS
-        ON COUNTRIES.REGION_ID = REGIONS.REGION_ID
-    LEFT JOIN JOBS
-        ON E.JOB_ID = JOBS.JOB_ID
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    employees e
+    LEFT JOIN employees m ON e.manager_id = m.employee_id
+    LEFT JOIN departments ON e.department_id = departments.department_id
+    LEFT JOIN locations ON departments.location_id = locations.location_id
+    LEFT JOIN countries ON locations.country_id = countries.country_id
+    LEFT JOIN regions ON countries.region_id = regions.region_id
+    LEFT JOIN jobs ON e.job_id = jobs.job_id
+ORDER BY
+    employee_name ASC;
 
 
 
@@ -126,124 +169,150 @@ ORDER BY EMPLOYEE_NAME ASC;
 
 -----Traditional Code
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS, EMPLOYEES E, EMPLOYEES M, JOBS
-WHERE E.JOB_ID = JOBS.JOB_ID
-    AND E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID(+)
-    AND DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID(+)
-    AND LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID(+)
-    AND COUNTRIES.REGION_ID = REGIONS.REGION_ID(+)
-    AND E.MANAGER_ID = M.EMPLOYEE_ID(+)
-    AND JOBS.JOB_TITLE LIKE '%Sales%'
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions,
+    employees e,
+    employees m,
+    jobs
+WHERE
+        e.job_id = jobs.job_id
+    AND e.department_id = departments.department_id (+)
+    AND departments.location_id = locations.location_id (+)
+    AND locations.country_id = countries.country_id (+)
+    AND countries.region_id = regions.region_id (+)
+    AND e.manager_id = m.employee_id (+)
+    AND jobs.job_title LIKE '%Sales%'
+ORDER BY
+    employee_name ASC;
 
 ------ANSI Code
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM EMPLOYEES E
-    LEFT JOIN EMPLOYEES M
-        ON E.MANAGER_ID = M.EMPLOYEE_ID
-    LEFT JOIN DEPARTMENTS
-        ON E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID
-    LEFT JOIN LOCATIONS
-        ON DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID
-    LEFT JOIN COUNTRIES
-        ON LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID
-    LEFT JOIN REGIONS
-        ON COUNTRIES.REGION_ID = REGIONS.REGION_ID
-    LEFT JOIN JOBS
-        ON E.JOB_ID = JOBS.JOB_ID
-WHERE JOBS.JOB_TITLE
-    LIKE '%Sales%'
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    employees e
+    LEFT JOIN employees m ON e.manager_id = m.employee_id
+    LEFT JOIN departments ON e.department_id = departments.department_id
+    LEFT JOIN locations ON departments.location_id = locations.location_id
+    LEFT JOIN countries ON locations.country_id = countries.country_id
+    LEFT JOIN regions ON countries.region_id = regions.region_id
+    LEFT JOIN jobs ON e.job_id = jobs.job_id
+WHERE
+    jobs.job_title LIKE '%Sales%'
+ORDER BY
+    employee_name ASC;
 
 
 
 ------Hw many managers are there in the organization? List them out with all the relevantinformation about them.------
 
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS, EMPLOYEES E, EMPLOYEES M, JOBS
-WHERE E.JOB_ID = JOBS.JOB_ID
-    AND E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID(+)
-    AND DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID(+)
-    AND LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID(+)
-    AND COUNTRIES.REGION_ID = REGIONS.REGION_ID(+)
-    AND E.MANAGER_ID = M.EMPLOYEE_ID(+)
-    AND JOBS.JOB_TITLE LIKE '%Manager%'
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions,
+    employees e,
+    employees m,
+    jobs
+WHERE
+        e.job_id = jobs.job_id
+    AND e.department_id = departments.department_id (+)
+    AND departments.location_id = locations.location_id (+)
+    AND locations.country_id = countries.country_id (+)
+    AND countries.region_id = regions.region_id (+)
+    AND e.manager_id = m.employee_id (+)
+    AND jobs.job_title LIKE '%Manager%'
+ORDER BY
+    employee_name ASC;
 
 ------ANSI Code
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM EMPLOYEES E
-    LEFT JOIN EMPLOYEES M
-        ON E.MANAGER_ID = M.EMPLOYEE_ID
-    LEFT JOIN DEPARTMENTS
-        ON E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID
-    LEFT JOIN LOCATIONS
-        ON DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID
-    LEFT JOIN COUNTRIES
-        ON LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID
-    LEFT JOIN REGIONS
-        ON COUNTRIES.REGION_ID = REGIONS.REGION_ID
-    LEFT JOIN JOBS
-        ON E.JOB_ID = JOBS.JOB_ID
-WHERE JOBS.JOB_TITLE
-    LIKE '%Manager%'
-ORDER BY EMPLOYEE_NAME ASC;
-
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    employees e
+    LEFT JOIN employees m ON e.manager_id = m.employee_id
+    LEFT JOIN departments ON e.department_id = departments.department_id
+    LEFT JOIN locations ON departments.location_id = locations.location_id
+    LEFT JOIN countries ON locations.country_id = countries.country_id
+    LEFT JOIN regions ON countries.region_id = regions.region_id
+    LEFT JOIN jobs ON e.job_id = jobs.job_id
+WHERE
+    jobs.job_title LIKE '%Manager%'
+ORDER BY
+    employee_name ASC;
 
 
 
@@ -251,63 +320,89 @@ ORDER BY EMPLOYEE_NAME ASC;
 
 
 ----Traditional Code-----
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM DEPARTMENTS, LOCATIONS, COUNTRIES, REGIONS, EMPLOYEES E, EMPLOYEES M, JOBS
-WHERE E.JOB_ID = JOBS.JOB_ID
-    AND E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID(+)
-    AND DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID(+)
-    AND LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID(+)
-    AND COUNTRIES.REGION_ID = REGIONS.REGION_ID(+)
-    AND E.MANAGER_ID = M.EMPLOYEE_ID(+)
-    AND E.SALARY <
-        (SELECT AVG (SALARY)
-        FROM EMPLOYEES)
-ORDER BY EMPLOYEE_NAME ASC, E.SALARY DESC;
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    departments,
+    locations,
+    countries,
+    regions,
+    employees e,
+    employees m,
+    jobs
+WHERE
+        e.job_id = jobs.job_id
+    AND e.department_id = departments.department_id (+)
+    AND departments.location_id = locations.location_id (+)
+    AND locations.country_id = countries.country_id (+)
+    AND countries.region_id = regions.region_id (+)
+    AND e.manager_id = m.employee_id (+)
+    AND e.salary < (
+        SELECT
+            AVG(salary)
+        FROM
+            employees
+    )
+ORDER BY
+    employee_name ASC,
+    e.salary DESC;
 
 
-SELECT E.FIRST_NAME || ' ' || E.LAST_NAME EMPLOYEE_NAME,
-        E.EMAIL,
-        E.PHONE_NUMBER,
-        E.HIRE_DATE,
-        JOBS.JOB_TITLE,
-        E.SALARY,
-        E.COMMISSION_PCT,
-        DEPARTMENTS.DEPARTMENT_NAME,
-        LOCATIONS.CITY,
-        LOCATIONS.STATE_PROVINCE,
-        COUNTRIES.COUNTRY_NAME,
-        REGIONS.REGION_NAME,
-        M.FIRST_NAME || ' ' || M.LAST_NAME MANAGER_NAME     
-FROM EMPLOYEES E
-    LEFT JOIN EMPLOYEES M
-        ON E.MANAGER_ID = M.EMPLOYEE_ID
-    LEFT JOIN DEPARTMENTS
-        ON E.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID
-    LEFT JOIN LOCATIONS
-        ON DEPARTMENTS.LOCATION_ID = LOCATIONS.LOCATION_ID
-    LEFT JOIN COUNTRIES
-        ON LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID
-    LEFT JOIN REGIONS
-        ON COUNTRIES.REGION_ID = REGIONS.REGION_ID
-    LEFT JOIN JOBS
-        ON E.JOB_ID = JOBS.JOB_ID
-WHERE E.SALARY <
-        (SELECT AVG (SALARY)
-        FROM EMPLOYEES)
-ORDER BY EMPLOYEE_NAME ASC, E.SALARY DESC;
+-----------------------------------------------------------------------------------------------------------
 
+
+SELECT
+    e.first_name
+    || ' '
+    || e.last_name employee_name,
+    e.email,
+    e.phone_number,
+    e.hire_date,
+    jobs.job_title,
+    e.salary,
+    e.commission_pct,
+    departments.department_name,
+    locations.city,
+    locations.state_province,
+    countries.country_name,
+    regions.region_name,
+    m.first_name
+    || ' '
+    || m.last_name manager_name
+FROM
+    employees e
+    LEFT JOIN employees m ON e.manager_id = m.employee_id
+    LEFT JOIN departments ON e.department_id = departments.department_id
+    LEFT JOIN locations ON departments.location_id = locations.location_id
+    LEFT JOIN countries ON locations.country_id = countries.country_id
+    LEFT JOIN regions ON countries.region_id = regions.region_id
+    LEFT JOIN jobs ON e.job_id = jobs.job_id
+WHERE
+    e.salary < (
+        SELECT
+            AVG(salary)
+        FROM
+            employees
+    )
+ORDER BY
+    employee_name ASC,
+    e.salary DESC;
 
 
 
@@ -315,50 +410,70 @@ ORDER BY EMPLOYEE_NAME ASC, E.SALARY DESC;
 
 
 --Traditional Code----
-SELECT d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d, EMPLOYEES e
-WHERE d.DEPARTMENT_ID = e.DEPARTMENT_ID(+)
-ORDER BY d.DEPARTMENT_ID;
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d,
+    employees   e
+WHERE
+    d.department_id = e.department_id (+)
+ORDER BY
+    d.department_id;
 
 --ANSI Code----
-SELECT d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d LEFT OUTER JOIN EMPLOYEES e
-ON d.DEPARTMENT_ID = e.DEPARTMENT_ID
-ORDER BY d.DEPARTMENT_ID;
-
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d
+    LEFT OUTER JOIN employees   e ON d.department_id = e.department_id
+ORDER BY
+    d.department_id;
 
 /************************** RIGHT OUTER JOIN: List down all the employees along with department details. **************************/
 
 --List down all the employees along with department details.
-SELECT 
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL,
-d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME
-FROM DEPARTMENTS d, EMPLOYEES e
-WHERE d.DEPARTMENT_ID(+) = e.DEPARTMENT_ID
-ORDER BY d.DEPARTMENT_ID;
+SELECT
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email,
+    d.department_id,
+    d.department_name
+FROM
+    departments d,
+    employees   e
+WHERE
+    d.department_id (+) = e.department_id
+ORDER BY
+    d.department_id;
 
 --ANSI JOIN
-SELECT 
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL,
-d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME
-FROM DEPARTMENTS d RIGHT OUTER JOIN EMPLOYEES e
-ON d.DEPARTMENT_ID = e.DEPARTMENT_ID
-ORDER BY d.DEPARTMENT_ID;
-
+SELECT
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email,
+    d.department_id,
+    d.department_name
+FROM
+    departments d
+    RIGHT OUTER JOIN employees   e ON d.department_id = e.department_id
+ORDER BY
+    d.department_id;
 
 
 /************************** FULL OUTER JOIN and SELF JOIN **************************/
@@ -368,41 +483,59 @@ ORDER BY d.DEPARTMENT_ID;
 
 --ANSI Code
 
-SELECT d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d FULL OUTER JOIN EMPLOYEES e
-ON d.DEPARTMENT_ID = e.DEPARTMENT_ID
-ORDER BY d.DEPARTMENT_ID;
-
-
---SELF JOIN: display employee details along with manager details
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d
+    FULL OUTER JOIN employees   e ON d.department_id = e.department_id
+ORDER BY
+    d.department_id;--SELF JOIN: display employee details along with manager details
 
 ----Traditional Code-----
 
-SELECT 
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL,
-m.EMPLOYEE_ID as MGR_EMPLOYEE_ID, 
-m.FIRST_NAME || ' ' || m.LAST_NAME MGR_NAME
-FROM EMPLOYEES e, EMPLOYEES m
-WHERE e.MANAGER_ID = m.EMPLOYEE_ID(+)
-ORDER BY e.EMPLOYEE_ID;
+SELECT
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email,
+    m.employee_id  AS mgr_employee_id,
+    m.first_name
+    || ' '
+    || m.last_name mgr_name
+FROM
+    employees e,
+    employees m
+WHERE
+    e.manager_id = m.employee_id (+)
+ORDER BY
+    e.employee_id;
+    
 
---ANSI Code
-SELECT 
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL,
-m.EMPLOYEE_ID as MGR_EMPLOYEE_ID, 
-m.FIRST_NAME || ' ' || m.LAST_NAME MGR_NAME
-FROM EMPLOYEES e LEFT JOIN EMPLOYEES m
-ON e.MANAGER_ID = m.EMPLOYEE_ID
-ORDER BY e.EMPLOYEE_ID;
+--------ANSI Code
 
+
+SELECT
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email,
+    m.employee_id  AS mgr_employee_id,
+    m.first_name
+    || ' '
+    || m.last_name mgr_name
+FROM
+    employees e
+    LEFT JOIN employees m ON e.manager_id = m.employee_id
+ORDER BY
+    e.employee_id;
 
 
 --FULL OUTER JOIN: Display all the employee and department records along with missing data.
@@ -410,36 +543,50 @@ ORDER BY e.EMPLOYEE_ID;
 
 --Traditional Code---
 
-SELECT d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d, EMPLOYEES e
-WHERE d.DEPARTMENT_ID = e.DEPARTMENT_ID(+)
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d,
+    employees   e
+WHERE
+    d.department_id = e.department_id (+)
 UNION
-SELECT 
-d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d, EMPLOYEES e
-WHERE d.DEPARTMENT_ID(+) = e.DEPARTMENT_ID;
-
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d,
+    employees   e
+WHERE
+    d.department_id (+) = e.department_id;
 
 
 --ANSI Code----
 
-SELECT d.DEPARTMENT_ID,
-d.DEPARTMENT_NAME,
-e.EMPLOYEE_ID, 
-e.FIRST_NAME || ' ' || e.LAST_NAME NAME,
-e.EMAIL
-FROM DEPARTMENTS d FULL OUTER JOIN EMPLOYEES e
-ON d.DEPARTMENT_ID = e.DEPARTMENT_ID
-ORDER BY d.DEPARTMENT_ID;
-
+SELECT
+    d.department_id,
+    d.department_name,
+    e.employee_id,
+    e.first_name
+    || ' '
+    || e.last_name name,
+    e.email
+FROM
+    departments d
+    FULL OUTER JOIN employees   e ON d.department_id = e.department_id
+ORDER BY
+    d.department_id;
 
 
 ---------****************************The End**************************---------------------------
